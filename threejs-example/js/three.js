@@ -1,6 +1,8 @@
 (function() {
   var scene = new THREE.Scene();
 
+  var animationSpeed = 0.05;
+
   var fieldOfView = 75;
   var aspectRatio = window.innerWidth / window.innerHeight;
   var nearClip = 0.1;
@@ -27,23 +29,23 @@
   scene.add(cube);
 
   function rotate(mesh) {
-    mesh.rotation.x += 0.1;
-    mesh.rotation.y += 0.1;
-  };
-
-  function zoomOut(camera) {
-    camera.position.z += 0.1;
+    mesh.rotation.x += animationSpeed;
+    mesh.rotation.y += animationSpeed;
   }
 
-  function zoomIn(camera) {
-    camera.position.z -= 0.1;
+  var clock = new THREE.Clock();
+
+  function moveCamera(camera, clock) {
+    var newPosition = Math.sin(clock.getElapsedTime() * 2) * 10 + 12;
+    camera.position.z = newPosition;
   }
 
   function render() {
+    moveCamera(camera, clock);
     rotate(cube);
-    zoomOut(camera);
     requestAnimationFrame(render);
     renderer.render(scene, camera);
   }
+
   render();
 })();
